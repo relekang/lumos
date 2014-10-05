@@ -1,0 +1,35 @@
+import express
+import path
+import morgan as logging
+import body-parser as bodyParser
+
+import ./routes
+app = express()
+
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'jade')
+app.set('trust proxy', true)
+
+app.use(express.static(path.join(__dirname, 'public')))
+app.use(logging('dev'))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded())
+
+app.use('/', routes)
+
+# catch 404 and forward to error handler
+app.use((req, res, next) ->
+    err = new Error('Not Found')
+    err.status = 404
+    next(err)
+)
+
+app.use((err, req, res, next) ->
+    res.status(err.status or 500)
+    res.json({
+        message: err.message,
+        error: err
+    })
+)
+
+export app
