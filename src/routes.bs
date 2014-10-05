@@ -10,7 +10,7 @@ router.post('/nexa-send', (req, res) ->
     command = req.body.command
     console.log(req.body)
     if _.contains(['1on', '1off'], command)
-        child_process.execAsync('nexa-send #{command}')
+        child_process.execAsync('nexa_send #{command}')
             .spread((stdout, stderr) ->
                 res.json({ success: true })
             , (err) ->
